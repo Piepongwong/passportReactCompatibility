@@ -25,15 +25,13 @@ function checkAuthentication(req,res,next){
     }
 }
 
-app.use(require("cors")({
-    credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:3000/", "localhost:3000/", "http://localhost:3001"]
-}))
-
-app.use((req,res,next)=> {
-    debugger
-    next()
-})
+if(config.environment === "dev") {
+    console.log("Setting Cors for Dev Environment")
+    app.use(require("cors")({
+        credentials: true,
+        origin: ["http://localhost:3000", "http://localhost:3000/", "localhost:3000/", "http://localhost:3001"]
+    }))
+}
 
 passport.use(new SlackStrategy({
     clientID: config.slack.clientID,
@@ -117,12 +115,18 @@ app.use(require('express-session')({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', require('./routes/index'))
 app.use('/user', require('./routes/user'))
+app.use('/user', require('./routes/login'))
+
+config.environment = "production"
+if(config.environment == "production") {
+    app.use(express.static(path.join(__dirname, 'react-client')));
+    app.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname, '/react-client', 'index.html'));
+    })   
+}
 
 passport.serializeUser(function(user, done) {
-    debugger
     done(null, user)
 })
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from "axios"
 import qs from 'qs';
@@ -19,9 +18,9 @@ class App extends Component {
   }
 
   componentDidMount = ()=> {
-    this.isLoggedInd()
+    this.isLoggedIn()
   }
-  isLoggedInd = ()=> {
+  isLoggedIn = ()=> {
     axios.get(`${config.backendUrl}user/auth/isloggedin`, {withCredentials: true})
       .then((result)=> {
         debugger
@@ -48,23 +47,28 @@ class App extends Component {
     })
   }
   render() {
-    return (
-      <div>
+    if(!this.state.isLoggedIn) {
+      return (
         <div>
-          <input onChange={this.change} name="username" placeholder="username"/>
-          <input onChange={this.change} name="password" type="password" placeholder="password"/>
-          <button onClick={this.submit}>Submit</button>
+          <div>
+            <input onChange={this.change} name="username" placeholder="username"/>
+            <input onChange={this.change} name="password" type="password" placeholder="password"/>
+            <button onClick={this.submit}>Submit</button>
+          </div>
+  
+          <button onClick={this.loginSlack}>Slack Login</button>
+  
+          <a href={`${config.backendUrl}user/auth/slack`}> Slack </a>
+          <a href={`${config.backendUrl}user/auth/spotify`}> Spotify </a>
+  
         </div>
-
-        <button onClick={this.loginSlack}>Slack Login</button>
-
-        <a href={`${config.backendUrl}user/auth/slack`}> Slack </a>
-        <a href={`${config.backendUrl}user/auth/spotify`}> Spotify </a>
-
-      </div>
-
-    );
+      )
+       } else {
+        return (
+          <h1> Profile </h1>
+        )
+      }
+    }
   }
-}
 
 export default App;

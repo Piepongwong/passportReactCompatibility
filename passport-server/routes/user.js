@@ -1,46 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var config = require('../config.json')
 
 function checkAuthentication(req,res,next){
-    debugger
     if(req.isAuthenticated()){
-        debugger
         next();
     } else{
-        debugger
         res.redirect("/user/login");
     }
 }
-/* GET home page. */
 router.post('/login', passport.authenticate('local'),
     function(req, res,next) {
-    debugger
     res.redirect('/');
 });
 
-router.post('/login-react', (req,res, next)=> {
-    debugger
-    next()
-}, passport.authenticate('local'), (req,res)=> {
-    debugger
+router.post('/login-react', passport.authenticate('local'), (req,res)=> {
     res.send(200)
 });
 
 router.get("/profile", checkAuthentication, function(req, res) {
     res.send("profile" + req.session.passport.user.username)
-})
-
-router.get("/login", function(req, res){
-    res.send(`
-
-        <form method="POST" action="/user/login">
-            <input name="password" value="password"/>
-            <input name="username" value="username"/>
-            <input type='submit' value='submit' />
-        </form>
-    
-    `)
 })
 
 router.get("/auth/isloggedin", (req, res)=> {
@@ -51,26 +31,20 @@ router.get("/auth/isloggedin", (req, res)=> {
     )
 })
 
-router.get("/supersecret", checkAuthentication, function(req, res){
-    res.send("Secret!")
-})
-
 router.get("/auth/spotify", passport.authenticate("spotify"));
 router.get("/auth/spotify/callback", passport.authenticate("spotify"), function(req, res){
-    debugger
-    // res.send("Authenticated with SLACK!")
-    res.redirect("http://localhost:3000")
+    console.log("Authenticated with Spotify")
+    res.redirect(`${config.reactUrl}`)
 });
 
 router.get("/auth/slack", passport.authenticate("slack"));
 router.get("/auth/slack/callback", passport.authenticate("slack"), function(req, res){
-    debugger
-    // res.send("Authenticated with SLACK!")
-    res.redirect("http://localhost:3000")
+    console.log("Authenticated with Slack")
+    res.redirect(`${config.reactUrl}`)
 });
 
 router.get('/auth/facebook',passport.authenticate('facebook'))
 router.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
+  passport.authenticate('facebook', { successRedirect: config.reactUrl,
+                                      failureRedirect: config.reactUrl }));
 module.exports = router;

@@ -1,0 +1,18 @@
+{
+    "slack": {
+        "clientID": "497419029027.504128989813",
+        "clientSecret": "71b825aa875ef4e1f816dfe0bc1a7afc"
+    }, 
+    "facebook": {
+        "clientID": "314792246031617",
+        "clientSecret": "3ec58c908a77676cf1b588a2c5cf5b2e"
+    },
+    "spotify": {
+        "clientID": "0d5fc40d83b54dd1b7b1e1a9ddb4098a",
+        "clientSecret": "fa60b1af11884c0aabbb29f53289a0d7"
+    },
+    "baseUrl": "198.199.125.153",
+    "environment": "production",
+    "reactUrl": "198.199.125.153",
+    "backendPort": "80"
+}
