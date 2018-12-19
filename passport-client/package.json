@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "REACT_APP_SECRET_BACKEND_URL=http://localhost:3001 react-scripts start",
-    "build": "REACT_APP_SECRET_BACKEND_URL=http://localhost:3001 react-scripts build && mv build ../passport-server/react-client",
+    "build": "rm -R ../passport-server/react-client && react-scripts build && mv build ../passport-server/react-client",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
